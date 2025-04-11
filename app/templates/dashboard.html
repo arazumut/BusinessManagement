@@ -1,0 +1,184 @@
+{% extends 'shared/layout.html' %}
+
+{% block title %}Gösterge Paneli - Şirket Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2 class="border-bottom pb-2"><i class="fas fa-tachometer-alt me-2"></i>Gösterge Paneli</h2>
+    </div>
+</div>
+
+<!-- İstatistik Kartları -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Toplam Çalışan</h6>
+                        <h2 class="card-text">{{ stats.total_employees }}</h2>
+                    </div>
+                    <i class="fas fa-users fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="{{ url_for('employee.index') }}" class="text-white text-decoration-none">Detayları Görüntüle</a>
+                <i class="fas fa-angle-right"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Toplam Departman</h6>
+                        <h2 class="card-text">{{ stats.total_departments }}</h2>
+                    </div>
+                    <i class="fas fa-sitemap fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="{{ url_for('department.index') }}" class="text-white text-decoration-none">Detayları Görüntüle</a>
+                <i class="fas fa-angle-right"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Bekleyen İzinler</h6>
+                        <h2 class="card-text">{{ stats.pending_leaves }}</h2>
+                    </div>
+                    <i class="fas fa-calendar-alt fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="{{ url_for('leave.index') }}" class="text-white text-decoration-none">Detayları Görüntüle</a>
+                <i class="fas fa-angle-right"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Toplam Proje</h6>
+                        <h2 class="card-text">{{ stats.total_projects }}</h2>
+                    </div>
+                    <i class="fas fa-project-diagram fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="{{ url_for('project.index') }}" class="text-white text-decoration-none">Detayları Görüntüle</a>
+                <i class="fas fa-angle-right"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% if current_user.is_admin() or current_user.is_manager() %}
+    <!-- Yöneticiler için detaylı istatistikler -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Departmanlara Göre Çalışan Dağılımı</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Departman</th>
+                                <th class="text-end">Çalışan Sayısı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dept in stats.departments %}
+                            <tr>
+                                <td>{{ dept.name }}</td>
+                                <td class="text-end">{{ dept.employee_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- İzin Talepleri -->
+    <div class="col-md-{% if current_user.is_admin() or current_user.is_manager() %}6{% else %}12{% endif %} mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Son İzin Talepleri</h5>
+                <a href="{{ url_for('leave.index') }}" class="btn btn-sm btn-outline-primary">Tümünü Gör</a>
+            </div>
+            <div class="card-body">
+                {% if leave_requests %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Çalışan</th>
+                                <th>İzin Türü</th>
+                                <th>Tarih</th>
+                                <th>Durum</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for leave in leave_requests %}
+                            <tr>
+                                <td>{{ leave.employee.user.full_name }}</td>
+                                <td>
+                                    {% if leave.leave_type == 'yillik_izin' %}
+                                    <span class="badge bg-primary">Yıllık İzin</span>
+                                    {% elif leave.leave_type == 'hastalik_izni' %}
+                                    <span class="badge bg-danger">Hastalık İzni</span>
+                                    {% elif leave.leave_type == 'ucretsiz_izin' %}
+                                    <span class="badge bg-secondary">Ücretsiz İzin</span>
+                                    {% else %}
+                                    <span class="badge bg-info">{{ leave.leave_type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ leave.start_date.strftime('%d.%m.%Y') }} - {{ leave.end_date.strftime('%d.%m.%Y') }}</td>
+                                <td>
+                                    {% if leave.status == 'beklemede' %}
+                                    <span class="badge bg-warning">Beklemede</span>
+                                    {% elif leave.status == 'onaylandi' %}
+                                    <span class="badge bg-success">Onaylandı</span>
+                                    {% elif leave.status == 'reddedildi' %}
+                                    <span class="badge bg-danger">Reddedildi</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">İptal Edildi</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if current_user.is_admin() or current_user.is_manager() %}
+                                    {% if leave.status == 'beklemede' %}
+                                    <a href="{{ url_for('leave.review', id=leave.id) }}" class="btn btn-sm btn-outline-primary">İncele</a>
+                                    {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Henüz izin talebi bulunmamaktadır.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

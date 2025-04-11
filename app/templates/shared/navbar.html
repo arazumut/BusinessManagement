@@ -1,0 +1,114 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">
+            <i class="fas fa-building me-2"></i>Şirket Yönetim Sistemi
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}" 
+                       href="{{ url_for('main.dashboard') }}">
+                        <i class="fas fa-tachometer-alt me-1"></i>Gösterge Paneli
+                    </a>
+                </li>
+                
+                {% if current_user.is_admin() %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-tools me-1"></i>Yönetici Paneli
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('admin.index') }}">Genel Bakış</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('admin.users') }}">Kullanıcılar</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('admin.system_settings') }}">Sistem Ayarları</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                
+                {% if current_user.is_admin() or current_user.is_manager() %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="employeeDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-users me-1"></i>Çalışanlar
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="employeeDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('employee.index') }}">Çalışan Listesi</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('employee.create') }}">Yeni Çalışan Ekle</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="departmentDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-sitemap me-1"></i>Departmanlar
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="departmentDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('department.index') }}">Departman Listesi</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('department.create') }}">Yeni Departman Ekle</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('department.positions') }}">Pozisyonlar</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="leaveDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-calendar-alt me-1"></i>İzinler
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="leaveDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('leave.index') }}">İzin Listesi</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('leave.apply') }}">İzin Başvurusu</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="projectDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-project-diagram me-1"></i>Projeler
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="projectDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('project.index') }}">Proje Listesi</a></li>
+                        {% if current_user.is_admin() or current_user.is_manager() %}
+                        <li><a class="dropdown-item" href="{{ url_for('project.create') }}">Yeni Proje Oluştur</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-1"></i>{{ current_user.full_name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">Profil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Çıkış Yap</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">
+                        <i class="fas fa-sign-in-alt me-1"></i>Giriş Yap
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.register') }}">
+                        <i class="fas fa-user-plus me-1"></i>Kayıt Ol
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav> 

@@ -1,0 +1,110 @@
+{% extends 'shared/layout.html' %}
+
+{% block title %}Ana Sayfa - Şirket Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded shadow-sm">
+    <div class="container">
+        <h1 class="display-4">Şirket Yönetim Sistemi</h1>
+        <p class="lead">Modern şirketler için her şeyi tek bir yerden yönetmenin en kolay yolu.</p>
+        <hr class="my-4">
+        <p>Çalışanlar, departmanlar, izinler ve projeleri kolayca yönetin. Hemen başlamak için giriş yapın veya kayıt olun.</p>
+        <div class="mt-4">
+            <a class="btn btn-primary btn-lg" href="{{ url_for('auth.login') }}" role="button">
+                <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+            </a>
+            <a class="btn btn-secondary btn-lg ms-2" href="{{ url_for('auth.register') }}" role="button">
+                <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Çalışan Yönetimi</h5>
+                    <p class="card-text">Tüm çalışan bilgilerini tek bir yerden yönetin, izinleri takip edin.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-sitemap fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Departman Organizasyonu</h5>
+                    <p class="card-text">Şirket yapısını organize edin, departmanları ve pozisyonları tanımlayın.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-project-diagram fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Proje Takibi</h5>
+                    <p class="card-text">Projeleri ve görevleri takip edin, ilerlemeleri anında görüntüleyin.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="mb-4">Neden Bizi Seçmelisiniz?</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Kolay kullanımlı arayüz</li>
+                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Her cihazda erişim</li>
+                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Güvenli veri yönetimi</li>
+                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Kapsamlı raporlama</li>
+                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>7/24 teknik destek</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3 class="mb-4">SSS</h3>
+            <div class="accordion" id="accordionFAQ">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Sistemi nasıl kullanabilirim?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            Kayıt olduktan sonra yönetici onayıyla sisteme erişebilirsiniz. Rol bazlı yetkilendirme ile size atanan özellikleri kullanabilirsiniz.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Verilerim güvende mi?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            Evet, tüm veriler şifrelenerek saklanmaktadır ve sadece yetkili personelin erişimi vardır.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            İzin taleplerini nasıl oluşturabilirim?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            İzinler menüsünden "İzin Başvurusu" seçeneğini kullanarak yeni izin talebi oluşturabilirsiniz.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

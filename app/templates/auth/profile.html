@@ -1,0 +1,202 @@
+{% extends 'shared/layout.html' %}
+
+{% block title %}Profilim - Şirket Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2 class="border-bottom pb-2"><i class="fas fa-user-circle me-2"></i>Kullanıcı Profili</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Profil Bilgileri</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <div class="d-inline-block position-relative">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 120px; height: 120px; font-size: 48px;">
+                            {{ current_user.first_name[0] }}{{ current_user.last_name[0] }}
+                        </div>
+                        {% if current_user.is_admin() %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            Admin
+                        </span>
+                        {% elif current_user.is_manager() %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                            Yönetici
+                        </span>
+                        {% else %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+                            Personel
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <h4>{{ current_user.full_name }}</h4>
+                <p class="text-muted">{{ current_user.email }}</p>
+                
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                        <i class="fas fa-key me-2"></i>Şifre Değiştir
+                    </button>
+                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        <i class="fas fa-edit me-2"></i>Profili Düzenle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Hesap Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">Ad:</div>
+                    <div class="col-md-8">{{ current_user.first_name }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">Soyad:</div>
+                    <div class="col-md-8">{{ current_user.last_name }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">E-posta:</div>
+                    <div class="col-md-8">{{ current_user.email }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">Rol:</div>
+                    <div class="col-md-8">
+                        {% if current_user.is_admin() %}
+                        <span class="badge bg-danger">Admin</span>
+                        {% elif current_user.is_manager() %}
+                        <span class="badge bg-warning text-dark">Yönetici</span>
+                        {% else %}
+                        <span class="badge bg-info text-dark">Personel</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">Hesap Durumu:</div>
+                    <div class="col-md-8">
+                        {% if current_user.is_active %}
+                        <span class="badge bg-success">Aktif</span>
+                        {% else %}
+                        <span class="badge bg-danger">Pasif</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-muted">Kayıt Tarihi:</div>
+                    <div class="col-md-8">{{ current_user.created_at.strftime('%d.%m.%Y %H:%M') }}</div>
+                </div>
+            </div>
+        </div>
+        
+        {% if current_user.employee_profile %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Çalışan Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">TC Kimlik No:</div>
+                    <div class="col-md-8">{{ current_user.employee_profile.tc_kimlik }}</div>
+                </div>
+                {% if current_user.employee_profile.phone %}
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">Telefon:</div>
+                    <div class="col-md-8">{{ current_user.employee_profile.phone }}</div>
+                </div>
+                {% endif %}
+                {% if current_user.employee_profile.department %}
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">Departman:</div>
+                    <div class="col-md-8">{{ current_user.employee_profile.department.name }}</div>
+                </div>
+                {% endif %}
+                {% if current_user.employee_profile.position %}
+                <div class="row mb-3">
+                    <div class="col-md-4 text-muted">Pozisyon:</div>
+                    <div class="col-md-8">{{ current_user.employee_profile.position.name }}</div>
+                </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-4 text-muted">İşe Başlangıç:</div>
+                    <div class="col-md-8">{{ current_user.employee_profile.hire_date.strftime('%d.%m.%Y') }}</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Şifre Değiştirme Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Şifre Değiştir</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" method="POST" action="#">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Mevcut Şifre</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">Yeni Şifre</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Yeni Şifre (Tekrar)</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" form="changePasswordForm" class="btn btn-primary">Şifreyi Değiştir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profil Düzenleme Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Profili Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm" method="POST" action="#">
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Ad</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ current_user.first_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Soyad</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ current_user.last_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-posta</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ current_user.email }}" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" form="editProfileForm" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

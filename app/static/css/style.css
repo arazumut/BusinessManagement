@@ -1,0 +1,154 @@
+/* 
+ * Şirket Yönetim Sistemi - Ana CSS Dosyası
+ */
+
+/* Ana stiller */
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Başlık ve paragraf stilleri */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+/* Navbar Stilleri */
+.navbar-brand {
+    font-weight: 600;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+/* Kart ve Kutu Stilleri */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    border-bottom: 1px solid #eee;
+}
+
+/* Tablo stilleri */
+.table th {
+    border-top: none;
+    font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,123,255,0.05);
+}
+
+/* Form stilleri */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+/* Buton stilleri */
+.btn {
+    border-radius: 0.25rem;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+/* İkon stilleri */
+.icon-large {
+    font-size: 1.5rem;
+}
+
+/* Yardımcı sınıflar */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Badge stilleri */
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+/* Özel renkler */
+.bg-employee {
+    background-color: #17a2b8;
+}
+
+.bg-department {
+    background-color: #28a745;
+}
+
+.text-pending {
+    color: #ffc107;
+}
+
+.text-approved {
+    color: #28a745;
+}
+
+.text-rejected {
+    color: #dc3545;
+}
+
+/* Dashboard kartları */
+.stat-card {
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Yanıt veren tasarım ayarlamaları */
+@media (max-width: 767.98px) {
+    .card-title {
+        font-size: 1.1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+}
+
+/* Yazdırma stilleri */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background-color: #fff;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+} 

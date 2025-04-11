@@ -1,0 +1,120 @@
+{% extends 'shared/layout.html' %}
+
+{% block title %}Çalışanlar - Şirket Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2 class="border-bottom pb-2"><i class="fas fa-users me-2"></i>Çalışan Listesi</h2>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <a href="{{ url_for('employee.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Yeni Çalışan Ekle
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h5 class="mb-0">Aktif Çalışanlar</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" id="table-search" placeholder="Çalışan ara...">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if employees %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ad Soyad</th>
+                        <th>E-posta</th>
+                        <th>Departman</th>
+                        <th>Pozisyon</th>
+                        <th>İşe Başlangıç</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.id }}</td>
+                        <td>
+                            <a href="{{ url_for('employee.view', id=employee.id) }}" class="text-decoration-none">
+                                {{ employee.user.full_name }}
+                            </a>
+                        </td>
+                        <td>{{ employee.user.email }}</td>
+                        <td>
+                            {% if employee.department %}
+                            {{ employee.department.name }}
+                            {% else %}
+                            <span class="text-muted fst-italic">Belirlenmemiş</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if employee.position %}
+                            {{ employee.position.name }}
+                            {% else %}
+                            <span class="text-muted fst-italic">Belirlenmemiş</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ employee.hire_date.strftime('%d.%m.%Y') }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="İşlemler">
+                                <a href="{{ url_for('employee.view', id=employee.id) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Görüntüle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('employee.edit', id=employee.id) }}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Düzenle">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDeleteEmployee({{ employee.id }})" data-bs-toggle="tooltip" title="Sil">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <form id="delete-employee-{{ employee.id }}" action="{{ url_for('employee.delete', id=employee.id) }}" method="POST" class="d-none"></form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>Henüz hiç çalışan eklenmemiş.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Tablo arama işlevselliği
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('table-search');
+        const tableRows = document.querySelectorAll('tbody tr');
+        
+        searchInput.addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            
+            tableRows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                if (rowText.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %} 
