@@ -92,7 +92,3 @@ Yeni özellikler eklemek veya hataları düzeltmek için:
 2. Değişikliklerinizi yapın ve commit edin: `git commit -am 'Yeni özellik eklendi'`
 3. Branch'i push edin: `git push origin yeni-ozellik`
 4. Pull request oluşturun
-
-## Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın. 
